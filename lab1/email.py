@@ -1,9 +1,7 @@
-import re
 
 if __name__ == "__main__":
     email = input("请输入邮箱:")
-    # 判断邮箱是否合法
-    if re.match(r"^\w+@\w+\.\w+$", email):
-        print("邮箱合法")
+    if email.find("@") != -1 and email.find(".") != -1:
+        print("邮箱格式正确")
     else:
-        print("邮箱不合法")
+        print("邮箱格式错误")
