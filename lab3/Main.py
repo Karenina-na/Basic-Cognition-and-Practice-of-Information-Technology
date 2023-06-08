@@ -19,6 +19,7 @@ class Main(QMainWindow):
         self.ui.deleteStudentButton.clicked.connect(self.removeStudent)
         self.ui.studentButton_3.clicked.connect(self.queryStudent)
         self.ui.courseButton.clicked.connect(self.courseRegister)
+        self.ui.deleteCourseButton.clicked.connect(self.removeCourse)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -226,15 +227,17 @@ class Main(QMainWindow):
         """
 
         # 获取课程号信息
-        courseID = self.ui.courseID_input_2.text()
+        courseID = self.ui.ID_input_8.text()
 
         # 如果有空值，弹出警告
         if courseID == "":
-            self.ui.courseID_input_2.setFocus()
-            self.ui.courseID_input_2.setStyleSheet("border: 1px solid red;")
+            self.ui.ID_input_8.setFocus()
+            self.ui.ID_input_8.setStyleSheet("border: 1px solid red;")
             self.ui.deleteCourseState.setText("不能为空")
             self.ui.deleteCourseState.setStyleSheet("color: red;")
             return
+        else:
+            self.ui.ID_input_8.setStyleSheet("")
 
         # 删除课程
         flag = self.courseManager.remove(courseID)
