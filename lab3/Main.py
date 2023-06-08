@@ -2,12 +2,13 @@
 
 import sys
 from functools import partial
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QSplashScreen
+
 from PyQt5 import QtCore, QtGui
-from UI.MainUI import Ui_StudentManagement
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QSplashScreen
+
 import Obj
 import util
-import time
+from UI.MainUI import Ui_StudentManagement
 
 
 class Main(QMainWindow):
@@ -613,6 +614,7 @@ class Main(QMainWindow):
                 for j in range(len(self.scList[i]['courseID'])):
                     self.ui.deleteStudentChoiceCourseID.addItem(self.scList[i]['courseID'][j])
 
+
 if __name__ == '__main__':
     # 创建应用
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
@@ -657,10 +659,12 @@ if __name__ == '__main__':
     # 创建主窗口
     main = Main()
 
+
     # 动画结束后关闭动画窗口并显示主窗口
     def on_animation_finished(sp, ma):
         sp.close()
         ma.show()
+
 
     animation.finished.connect(partial(on_animation_finished, splash, main))
 
