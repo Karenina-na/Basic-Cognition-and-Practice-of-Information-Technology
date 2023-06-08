@@ -22,6 +22,31 @@ class SelectCourseList:
             'courseID': courseID
         })
 
+    def remove(self, studentID, courseID):
+        """
+        删除选课信息
+        :param studentID: 学生ID
+        :param courseID: 课程ID
+        """
+        for select in self.select:
+            if select['studentID'] == studentID and select['courseID'] == courseID:
+                self.select.remove(select)
+                return True
+        return False
+
+    def query(self, studentID):
+        """
+        查询选课信息
+        :param studentID: 学生ID
+        """
+        if studentID == "":
+            return self.select
+        cho = []
+        for select in self.select:
+            if select['studentID'] == studentID:
+                cho.append(select)
+        return cho
+
     def load(self):
         """加载文件"""
         self.select = read_json(self.path)
