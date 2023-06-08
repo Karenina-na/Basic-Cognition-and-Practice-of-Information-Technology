@@ -420,9 +420,19 @@ class Main(QMainWindow):
 
     def removeSC(self):
         """
-        输入学号，课程号，删除选课
+        获取学号，课程号，删除选课
         """
-        pass
+        # 获取下拉框信息
+        studentID = self.ui.deleteStudentChoiceID.currentText()
+        courseID = self.ui.deleteStudentChoiceCourseID.currentText()
+
+        # 删除选课
+        self.scManager.remove(studentID, courseID)
+        self.update()
+
+        # 更改提示
+        self.ui.deleteChoiceState.setText("删除成功")
+        self.ui.deleteChoiceState.setStyleSheet("color: green;")
 
     def update(self):
         """
