@@ -22,6 +22,9 @@ class Main(QMainWindow):
         self.ui.deleteCourseButton.clicked.connect(self.removeCourse)
         self.ui.courseButton_2.clicked.connect(self.queryCourse)
         self.ui.studentButton_7.clicked.connect(self.SCRegister)
+        self.ui.deleteChoiceButton.clicked.connect(self.removeSC)
+        self.ui.SCButton.clicked.connect(self.querySC)
+        self.ui.deleteStudentChoiceID.currentIndexChanged.connect(self.updateCourseID)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -29,6 +32,10 @@ class Main(QMainWindow):
         self.courseManager = CourseList()
         # 选课管理类
         self.scManager = SelectCourseList()
+        # 选课学号课号列表
+        self.scList = []
+        # 更新选课学号课号列表
+        self.update()
 
         # 加载信息
         self.studentManager.load()
@@ -89,6 +96,7 @@ class Main(QMainWindow):
 
         # 注册学生
         self.studentManager.add(studentID, studentName, studentGender, studentAge, studentClass)
+        self.update()
 
         # 更改提示
         self.ui.lineEdit.setText("注册成功")
@@ -114,6 +122,8 @@ class Main(QMainWindow):
         flag = self.studentManager.remove(studentID)
 
         if flag:
+            self.scManager.removeByStudentID(studentID)
+            self.update()
             # 更改提示
             self.ui.deleteStudentState.setText("删除成功")
             self.ui.deleteStudentState.setStyleSheet("color: green;")
@@ -141,14 +151,14 @@ class Main(QMainWindow):
                 self.ui.textBrowser.setStyleSheet("color: red;")
             else:
                 # 更改提示，组装信息
-                output = "----------学生信息----------\n"
+                output = "---------学生信息---------\n"
                 for stu in student:
-                    # 学号预留10位，姓名预留4位，性别预留1位，年龄预留3位，班级预留3位
+                    # 学号预留10位，姓名预留4位，性别预留1位，年龄预留3位，班级预留2位
                     s = stu['studentID'] + " " * (11 - len(stu['studentID'])) + \
-                        stu['studentName'] + "  " * (5 - len(stu['studentName'])) + \
+                        stu['studentName'] + "  " * (4 - len(stu['studentName'])) + \
                         stu['studentSex'] + " " + \
                         stu['studentAge'] + " " * (3 - len(stu['studentAge'])) + \
-                        stu['studentClass'] + " " * (3 - len(stu['studentClass'])) + "\n"
+                        stu['studentClass'] + " " * (2 - len(stu['studentClass'])) + "\n"
                     output += s
                 self.ui.textBrowser.setText(output)
                 self.ui.textBrowser.setStyleSheet("color: black;")
@@ -161,12 +171,12 @@ class Main(QMainWindow):
             else:
                 # 组装信息
                 output = "----------学生信息----------\n"
-                # 学号预留10位，姓名预留4位，性别预留1位，年龄预留3位，班级预留3位
+                # 学号预留10位，姓名预留4位，性别预留1位，年龄预留3位，班级预留2位
                 s = student['studentID'] + " " * (11 - len(student['studentID'])) + \
-                    student['studentName'] + "  " * (5 - len(student['studentName'])) + \
+                    student['studentName'] + "  " * (4 - len(student['studentName'])) + \
                     student['studentSex'] + " " + \
                     student['studentAge'] + " " * (3 - len(student['studentAge'])) + \
-                    student['studentClass'] + " " * (3 - len(student['studentClass'])) + "\n"
+                    student['studentClass'] + " " * (2 - len(student['studentClass'])) + "\n"
                 output += s
                 self.ui.textBrowser.setText(output)
                 self.ui.textBrowser.setStyleSheet("color: black;")
@@ -245,6 +255,8 @@ class Main(QMainWindow):
         flag = self.courseManager.remove(courseID)
 
         if flag:
+            self.scManager.removeByCourseID(courseID)
+            self.update()
             # 更改提示
             self.ui.deleteCourseState.setText("删除成功")
             self.ui.deleteCourseState.setStyleSheet("color: green;")
@@ -272,13 +284,13 @@ class Main(QMainWindow):
                 self.ui.textBrowser_2.setStyleSheet("color: red;")
             else:
                 # 更改提示，组装信息
-                output = "-------课程信息-------\n"
+                output = "-----课程信息-----\n"
                 for cou in courses:
                     # 课程号预留3位，课程名预留4位，学分预留2位，执教老师预留4位
                     s = cou['courseID'] + " " * (4 - len(cou['courseID'])) + \
-                        cou['courseName'] + "  " * (5 - len(cou['courseName'])) + \
-                        cou['courseCredit'] + " " * (3 - len(cou['courseCredit'])) + \
-                        cou['courseTeacher'] + "  " * (5 - len(cou['courseTeacher'])) + "\n"
+                        cou['courseName'] + "  " * (4 - len(cou['courseName'])) + \
+                        cou['courseCredit'] + " " * (2 - len(cou['courseCredit'])) + \
+                        cou['courseTeacher'] + "  " * (4 - len(cou['courseTeacher'])) + "\n"
                     output += s
                 self.ui.textBrowser_2.setText(output)
                 self.ui.textBrowser_2.setStyleSheet("color: black;")
@@ -346,12 +358,111 @@ class Main(QMainWindow):
 
         # 注册选课
         self.scManager.add(studentID, courseID)
+        self.update()
         # 更改提示
         self.ui.lineEdit_2.setText("注册成功")
         self.ui.lineEdit_2.setStyleSheet("color: green;")
 
+    def querySC(self):
+        """
+        输入学号，查询选课
+        """
+
+        # 获取学生信息
+        studentID = self.ui.ID_input_6.text()
+
+        # 判断学生是否存在
+        if not self.studentManager.query(studentID):
+            # 更改提示
+            self.ui.textBrowser_3.setText("----学生信息不存在----\n")
+            self.ui.textBrowser_3.setStyleSheet("color: red;")
+            return
+
+        # 查询选课
+        mes = self.scManager.query(studentID)
+
+        if studentID == "":
+            # 查询全部
+            if not mes:
+                # 更改提示
+                self.ui.textBrowser_3.setText("------无选课信息------\n")
+                self.ui.textBrowser_3.setStyleSheet("color: red;")
+            else:
+                # 学号预留10位，课程号预留3位
+                # 更改提示，组装信息
+                output = "------选课信息------\n"
+                for m in mes:
+                    stuID = m['studentID']
+                    couID = m['courseID']
+                    s = "   " + stuID + " " * (11 - len(stuID)) + \
+                        couID + " " * (3 - len(couID)) + "\n"
+                    output += s
+                self.ui.textBrowser_3.setText(output)
+                self.ui.textBrowser_3.setStyleSheet("color: black;")
+        else:
+            # 查询单个
+            if mes is None:
+                # 更改提示
+                self.ui.textBrowser_3.setText("----选课信息不存在----\n")
+                self.ui.textBrowser_3.setStyleSheet("color: red;")
+            else:
+                # 学号预留10位，课程号预留3位
+                # 更改提示，组装信息
+                output = "------选课信息------\n"
+                for m in mes:
+                    stuID = m['studentID']
+                    couID = m['courseID']
+                    s = "   " + stuID + " " * (11 - len(stuID)) + \
+                        couID + " " * (3 - len(couID)) + "\n"
+                    output += s
+                self.ui.textBrowser_3.setText(output)
+                self.ui.textBrowser_3.setStyleSheet("color: black;")
+
     def removeSC(self):
+        """
+        输入学号，课程号，删除选课
+        """
         pass
+
+    def update(self):
+        """
+        更新学生学号和课号
+        """
+        mes = []
+        # 获取所有学生信息
+        students = self.studentManager.query('')
+        for stu in students:
+            # 获取学生的所有课程
+            courses = self.scManager.query(stu['studentID'])
+            courseID = []
+            for cou in courses:
+                courseID.append(cou['courseID'])
+            # 更新学生的课程信息
+            mes.append({
+                'studentID': stu['studentID'],
+                'courseID': courseID
+            })
+        # 更新学生信息
+        self.scList = mes
+
+        # 更新下拉栏信息
+        self.ui.deleteStudentChoiceID.clear()
+        for i in range(len(self.scList)):
+            self.ui.deleteStudentChoiceID.addItem(self.scList[i]['studentID'])
+
+    def updateCourseID(self):
+        """
+        更新课程号
+        """
+        # 获取下拉栏选中的学生学号
+        studentID = self.ui.deleteStudentChoiceID.currentText()
+
+        # 更新下拉栏信息
+        self.ui.deleteStudentChoiceCourseID.clear()
+        for i in range(len(self.scList)):
+            if self.scList[i]['studentID'] == studentID:
+                for j in range(len(self.scList[i]['courseID'])):
+                    self.ui.deleteStudentChoiceCourseID.addItem(self.scList[i]['courseID'][j])
 
 
 if __name__ == '__main__':

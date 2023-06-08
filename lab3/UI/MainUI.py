@@ -1091,7 +1091,7 @@ class Ui_StudentManagement(object):
         self.textBrowser.setAcceptDrops(True)
         self.textBrowser.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
         self.textBrowser.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
-        self.textBrowser.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustIgnored)
+        self.textBrowser.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
         self.textBrowser.setAcceptRichText(True)
         self.textBrowser.setObjectName("textBrowser")
         self.studentCheck.addWidget(self.textBrowser)
@@ -1478,7 +1478,7 @@ class Ui_StudentManagement(object):
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'楷体\'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:\'Agency FB\';\"><br /></p></body></html>"))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.ID_input_6.setPlaceholderText(_translate("StudentManagement", "请输入学生学号"))
         self.SCButton.setText(_translate("StudentManagement", "查询"))
         self.label_3.setText(_translate("StudentManagement", "空置查询代表查询全部"))
@@ -1513,6 +1513,11 @@ class Ui_StudentManagement(object):
         self.courseID_label_2.setText(_translate("StudentManagement", "课程号"))
         self.courseID_input_2.setPlaceholderText(_translate("StudentManagement", "请输入课程号"))
         self.StudentInfoTitle_3.setText(_translate("StudentManagement", "<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\">课程信息查询</span></p></body></html>"))
+        self.textBrowser_2.setHtml(_translate("StudentManagement", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'楷体\'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>"))
         self.ID_input_4.setPlaceholderText(_translate("StudentManagement", "请输入课程号"))
         self.courseButton_2.setText(_translate("StudentManagement", "查询"))
         self.label_2.setText(_translate("StudentManagement", "空置查询代表查询全部"))
