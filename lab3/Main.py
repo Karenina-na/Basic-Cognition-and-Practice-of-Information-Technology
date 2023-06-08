@@ -21,6 +21,7 @@ class Main(QMainWindow):
         self.ui.courseButton.clicked.connect(self.courseRegister)
         self.ui.deleteCourseButton.clicked.connect(self.removeCourse)
         self.ui.courseButton_2.clicked.connect(self.queryCourse)
+        self.ui.studentButton_7.clicked.connect(self.SCRegister)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -300,7 +301,54 @@ class Main(QMainWindow):
                 self.ui.textBrowser_2.setStyleSheet("color: black;")
 
     def SCRegister(self):
-        pass
+        """
+        输入学号，课程号，注册选课
+        """
+
+        # 获取学生信息
+        studentID = self.ui.ID_input_5.text()
+        courseID = self.ui.courseID_input_2.text()
+
+        # 如果有空值，弹出警告
+        if studentID == "":
+            self.ui.ID_input_5.setFocus()
+            self.ui.ID_input_5.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit_2.setText("不能为空")
+            self.ui.lineEdit_2.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.ID_input_5.setStyleSheet("")
+        if courseID == "":
+            self.ui.courseID_input_2.setFocus()
+            self.ui.courseID_input_2.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit_2.setText("不能为空")
+            self.ui.lineEdit_2.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseID_input_2.setStyleSheet("")
+
+        # 判断学生是否存在
+        if not self.studentManager.query(studentID):
+            # 更改提示
+            self.ui.lineEdit_2.setText("学号有误")
+            self.ui.lineEdit_2.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseID_input_2.setStyleSheet("")
+        # 判断课程是否存在
+        if not self.courseManager.query(courseID):
+            # 更改提示
+            self.ui.lineEdit_2.setText("课号有误")
+            self.ui.lineEdit_2.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseID_input_2.setStyleSheet("")
+
+        # 注册选课
+        self.scManager.add(studentID, courseID)
+        # 更改提示
+        self.ui.lineEdit_2.setText("注册成功")
+        self.ui.lineEdit_2.setStyleSheet("color: green;")
 
     def removeSC(self):
         pass
