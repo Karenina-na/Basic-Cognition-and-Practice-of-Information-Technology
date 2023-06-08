@@ -17,6 +17,7 @@ class Main(QMainWindow):
         # 挂载事件
         self.ui.studentButton.clicked.connect(self.studentRegister)
         self.ui.deleteStudentButton.clicked.connect(self.removeStudent)
+        self.ui.studentButton_3.clicked.connect(self.queryStudent)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -117,10 +118,54 @@ class Main(QMainWindow):
             self.ui.deleteStudentState.setText("不存在")
             self.ui.deleteStudentState.setStyleSheet("color: red;")
 
-
-
     def queryStudent(self):
-        pass
+        """
+        输入学号，查询学生
+        """
+
+        # 获取学号信息
+        studentID = self.ui.ID_input_2.text()
+
+        # 查询学生
+        student = self.studentManager.query(studentID)
+
+        if studentID == "":
+            # 查询全部
+            if not student:
+                # 更改提示
+                self.ui.textBrowser.setText("---------无学生信息---------")
+                self.ui.textBrowser.setStyleSheet("color: red;")
+            else:
+                # 更改提示，组装信息
+                output = "----------学生信息----------\n"
+                for stu in student:
+                    # 学号预留10位，姓名预留4位，性别预留1位，年龄预留3位，班级预留3位
+                    s = stu['studentID'] + " " * (11 - len(stu['studentID'])) + \
+                        stu['studentName'] + "  " * (5 - len(stu['studentName'])) + \
+                        stu['studentSex'] + " " + \
+                        stu['studentAge'] + " " * (3 - len(stu['studentAge'])) + \
+                        stu['studentClass'] + " " * (3 - len(stu['studentClass'])) + "\n"
+                    output += s
+                self.ui.textBrowser.setText(output)
+                self.ui.textBrowser.setStyleSheet("color: black;")
+        else:
+            # 查询单个
+            if student is None:
+                # 更改提示
+                self.ui.textBrowser.setText("-------学生信息不存在-------")
+                self.ui.textBrowser.setStyleSheet("color: red;")
+            else:
+                # 组装信息
+                output = "----------学生信息----------\n"
+                # 学号预留10位，姓名预留4位，性别预留1位，年龄预留3位，班级预留3位
+                s = student['studentID'] + " " * (11 - len(student['studentID'])) + \
+                    student['studentName'] + "  " * (5 - len(student['studentName'])) + \
+                    student['studentSex'] + " " + \
+                    student['studentAge'] + " " * (3 - len(student['studentAge'])) + \
+                    student['studentClass'] + " " * (3 - len(student['studentClass'])) + "\n"
+                output += s
+                self.ui.textBrowser.setText(output)
+                self.ui.textBrowser.setStyleSheet("color: black;")
 
     def courseRegister(self):
         pass

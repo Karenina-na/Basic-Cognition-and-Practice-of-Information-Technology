@@ -32,6 +32,32 @@ class TestStudentList(unittest.TestCase):
         self.assertTrue(stu.remove('1'))
         self.assertFalse(stu.remove('1'))
 
+    def test_query(self):
+        """测试查询学生"""
+        stu = Obj.StudentList()
+        stu.add('1', '2', '3', '4', '5')
+        self.assertEquals(stu.query('1')['studentID'], '1')
+        self.assertEquals(stu.query('1')['studentName'], '2')
+        self.assertEquals(stu.query('1')['studentSex'], '3')
+        self.assertEquals(stu.query('1')['studentAge'], '4')
+        self.assertEquals(stu.query('1')['studentClass'], '5')
+
+        # 查询全部
+        stu.add('2', '3', '4', '5', '6')
+        self.assertEquals(stu.query(''), [{
+            'studentID': '1',
+            'studentName': '2',
+            'studentSex': '3',
+            'studentAge': '4',
+            'studentClass': '5',
+        }, {
+            'studentID': '2',
+            'studentName': '3',
+            'studentSex': '4',
+            'studentAge': '5',
+            'studentClass': '6',
+        }])
+
     def test_write(self):
         """测试写入文件"""
         stu = Obj.StudentList()

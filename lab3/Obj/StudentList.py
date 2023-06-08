@@ -39,6 +39,19 @@ class StudentList:
                 return True
         return False
 
+    def query(self, studentID):
+        """
+        查询学生
+        :param studentID: 学号
+        学号为空代表查询全部
+        """
+        if studentID == "":
+            return self.students
+        for student in self.students:
+            if student['studentID'] == studentID:
+                return student
+        return None
+
     def load(self):
         """加载文件"""
         self.students = read_json(self.path)
