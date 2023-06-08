@@ -5,8 +5,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt5 import QtCore
 from UI.MainUI import Ui_StudentManagement
-from Obj import *
-
+import Obj
+import util
 
 class Main(QMainWindow):
     def __init__(self, parent=None):
@@ -27,11 +27,11 @@ class Main(QMainWindow):
         self.ui.deleteStudentChoiceID.currentIndexChanged.connect(self.updateCourseID)
 
         # 学生管理类
-        self.studentManager = StudentList()
+        self.studentManager = Obj.StudentList()
         # 课程管理类
-        self.courseManager = CourseList()
+        self.courseManager = Obj.CourseList()
         # 选课管理类
-        self.scManager = SelectCourseList()
+        self.scManager = Obj.SelectCourseList()
         # 选课学号课号列表
         self.scList = []
         # 更新选课学号课号列表
@@ -56,6 +56,40 @@ class Main(QMainWindow):
             studentGender = "女"
         studentAge = self.ui.Age_input.text()
         studentClass = self.ui.Class_input.text()
+
+        # 检查合法性
+        if not util.checkStudentID(studentID):
+            self.ui.ID_input.setFocus()
+            self.ui.ID_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不合法")
+            self.ui.lineEdit.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.ID_input.setStyleSheet("")
+        if not util.checkName(studentName):
+            self.ui.Name_input.setFocus()
+            self.ui.Name_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不合法")
+            self.ui.lineEdit.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.Name_input.setStyleSheet("")
+        if not util.checkAge(studentAge):
+            self.ui.Age_input.setFocus()
+            self.ui.Age_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不合法")
+            self.ui.lineEdit.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.Age_input.setStyleSheet("")
+        if not util.checkClass(studentClass):
+            self.ui.Class_input.setFocus()
+            self.ui.Class_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不合法")
+            self.ui.lineEdit.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.Class_input.setStyleSheet("")
 
         # 如果有空值，弹出警告
         if studentID == "":
@@ -97,6 +131,7 @@ class Main(QMainWindow):
         # 注册学生
         self.studentManager.add(studentID, studentName, studentGender, studentAge, studentClass)
         self.update()
+        self.studentManager.write()
 
         # 更改提示
         self.ui.lineEdit.setText("注册成功")
@@ -110,6 +145,16 @@ class Main(QMainWindow):
         # 获取学号信息
         studentID = self.ui.ID_input_7.text()
 
+        # 检查合法性
+        if not util.checkStudentID(studentID):
+            self.ui.ID_input_7.setFocus()
+            self.ui.ID_input_7.setStyleSheet("border: 1px solid red;")
+            self.ui.deleteStudentState.setText("不合法")
+            self.ui.deleteStudentState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.ID_input_7.setStyleSheet("")
+
         # 如果有空值，弹出警告
         if studentID == "":
             self.ui.ID_input_7.setFocus()
@@ -117,6 +162,8 @@ class Main(QMainWindow):
             self.ui.deleteStudentState.setText("不能为空")
             self.ui.deleteStudentState.setStyleSheet("color: red;")
             return
+        else:
+            self.ui.ID_input_7.setStyleSheet("")
 
         # 删除学生
         flag = self.studentManager.remove(studentID)
@@ -124,6 +171,7 @@ class Main(QMainWindow):
         if flag:
             self.scManager.removeByStudentID(studentID)
             self.update()
+            self.studentManager.write()
             # 更改提示
             self.ui.deleteStudentState.setText("删除成功")
             self.ui.deleteStudentState.setStyleSheet("color: green;")
@@ -139,6 +187,12 @@ class Main(QMainWindow):
 
         # 获取学号信息
         studentID = self.ui.ID_input_2.text()
+
+        # 检查合法性
+        if not util.checkStudentID(studentID):
+            self.ui.textBrowser.setText("----------不合法----------")
+            self.ui.textBrowser.setStyleSheet("color: red;")
+            return
 
         # 查询学生
         student = self.studentManager.query(studentID)
@@ -192,6 +246,40 @@ class Main(QMainWindow):
         courseCredit = self.ui.courseCredit_input.text()
         courseTeacher = self.ui.courseTeacher_input.text()
 
+        # 检查合法性
+        if not util.checkCourseID(courseID):
+            self.ui.courseID_input.setFocus()
+            self.ui.courseID_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不合法")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseID_input.setStyleSheet("")
+        if not util.checkCourseName(courseName):
+            self.ui.courseName_input.setFocus()
+            self.ui.courseName_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不合法")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseName_input.setStyleSheet("")
+        if not util.checkCourseCredit(courseCredit):
+            self.ui.courseCredit_input.setFocus()
+            self.ui.courseCredit_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不合法")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseCredit_input.setStyleSheet("")
+        if not util.checkCourseTeacher(courseTeacher):
+            self.ui.courseTeacher_input.setFocus()
+            self.ui.courseTeacher_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不合法")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseTeacher_input.setStyleSheet("")
+
         # 如果有空值，弹出警告
         if courseID == "":
             self.ui.courseID_input.setFocus()
@@ -228,6 +316,7 @@ class Main(QMainWindow):
 
         # 注册课程
         self.courseManager.add(courseID, courseName, courseCredit, courseTeacher)
+        self.courseManager.write()
 
         # 更改提示
         self.ui.courseState.setText("注册成功")
@@ -240,6 +329,16 @@ class Main(QMainWindow):
 
         # 获取课程号信息
         courseID = self.ui.ID_input_8.text()
+
+        # 检查合法性
+        if not util.checkCourseID(courseID):
+            self.ui.ID_input_8.setFocus()
+            self.ui.ID_input_8.setStyleSheet("border: 1px solid red;")
+            self.ui.deleteCourseState.setText("不合法")
+            self.ui.deleteCourseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.ID_input_8.setStyleSheet("")
 
         # 如果有空值，弹出警告
         if courseID == "":
@@ -257,6 +356,7 @@ class Main(QMainWindow):
         if flag:
             self.scManager.removeByCourseID(courseID)
             self.update()
+            self.courseManager.write()
             # 更改提示
             self.ui.deleteCourseState.setText("删除成功")
             self.ui.deleteCourseState.setStyleSheet("color: green;")
@@ -272,6 +372,12 @@ class Main(QMainWindow):
 
         # 获取课程信息
         courseID = self.ui.ID_input_4.text()
+
+        # 检查合法性
+        if not util.checkCourseID(courseID):
+            self.ui.textBrowser_2.setText("------不合法------")
+            self.ui.textBrowser_2.setStyleSheet("color: red;")
+            return
 
         # 查询课程
         courses = self.courseManager.query(courseID)
@@ -321,6 +427,24 @@ class Main(QMainWindow):
         studentID = self.ui.ID_input_5.text()
         courseID = self.ui.courseID_input_2.text()
 
+        # 检查合法性
+        if not util.checkStudentID(studentID):
+            self.ui.ID_input_5.setFocus()
+            self.ui.ID_input_5.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit_2.setText("不合法")
+            self.ui.lineEdit_2.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.ID_input_5.setStyleSheet("")
+        if not util.checkCourseID(courseID):
+            self.ui.courseID_input_2.setFocus()
+            self.ui.courseID_input_2.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit_2.setText("不合法")
+            self.ui.lineEdit_2.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseID_input_2.setStyleSheet("")
+
         # 如果有空值，弹出警告
         if studentID == "":
             self.ui.ID_input_5.setFocus()
@@ -359,6 +483,7 @@ class Main(QMainWindow):
         # 注册选课
         self.scManager.add(studentID, courseID)
         self.update()
+        self.scManager.write()
         # 更改提示
         self.ui.lineEdit_2.setText("注册成功")
         self.ui.lineEdit_2.setStyleSheet("color: green;")
@@ -370,6 +495,12 @@ class Main(QMainWindow):
 
         # 获取学生信息
         studentID = self.ui.ID_input_6.text()
+
+        # 检查合法性
+        if not util.checkStudentID(studentID):
+            self.ui.textBrowser_3.setText("不合法")
+            self.ui.textBrowser_3.setStyleSheet("color: red;")
+            return
 
         # 判断学生是否存在
         if not self.studentManager.query(studentID):
@@ -429,6 +560,7 @@ class Main(QMainWindow):
         # 删除选课
         self.scManager.remove(studentID, courseID)
         self.update()
+        self.scManager.write()
 
         # 更改提示
         self.ui.deleteChoiceState.setText("删除成功")
@@ -462,7 +594,7 @@ class Main(QMainWindow):
 
     def updateCourseID(self):
         """
-        更新课程号
+        当学号下拉框编号更新时，触发更新课程号操作
         """
         # 获取下拉栏选中的学生学号
         studentID = self.ui.deleteStudentChoiceID.currentText()
@@ -476,6 +608,7 @@ class Main(QMainWindow):
 
 
 if __name__ == '__main__':
+    # 创建应用
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
 
