@@ -190,7 +190,7 @@ class Main(QMainWindow):
 
         # 检查合法性
         if not util.checkStudentID(studentID):
-            self.ui.textBrowser.setText("----------不合法----------")
+            self.ui.textBrowser.setText("-----------不合法-----------")
             self.ui.textBrowser.setStyleSheet("color: red;")
             return
 
@@ -375,7 +375,7 @@ class Main(QMainWindow):
 
         # 检查合法性
         if not util.checkCourseID(courseID):
-            self.ui.textBrowser_2.setText("------不合法------")
+            self.ui.textBrowser_2.setText("--------不合法--------")
             self.ui.textBrowser_2.setStyleSheet("color: red;")
             return
 
@@ -498,7 +498,7 @@ class Main(QMainWindow):
 
         # 检查合法性
         if not util.checkStudentID(studentID):
-            self.ui.textBrowser_3.setText("不合法")
+            self.ui.textBrowser_3.setText("--------不合法--------")
             self.ui.textBrowser_3.setStyleSheet("color: red;")
             return
 
