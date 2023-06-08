@@ -47,6 +47,22 @@ class SelectCourseList:
                 cho.append(select)
         return cho
 
+    def removeByStudentID(self, studentID):
+        """
+        删除选课信息
+        :param studentID: 学生ID
+        """
+        self.select = [select for select in self.select if select['studentID'] != studentID]
+        return True
+
+    def removeByCourseID(self, courseID):
+        """
+        删除选课信息
+        :param courseID: 课程ID
+        """
+        self.select = [select for select in self.select if select['courseID'] != courseID]
+        return True
+
     def load(self):
         """加载文件"""
         self.select = read_json(self.path)

@@ -41,6 +41,28 @@ class TestSelectCourseList(unittest.TestCase):
         self.assertEqual(len(sc.query('2')), 1)
         self.assertEqual(len(sc.query('')), 3)
 
+    def test_removeByStudentID(self):
+        """测试删除选课信息"""
+        sc = Obj.SelectCourseList()
+        sc.add('1', '2')
+        sc.add('1', '3')
+        sc.add('2', '2')
+        sc.removeByStudentID('1')
+        self.assertEqual(len(sc.select), 1)
+        self.assertEqual(sc.select[0]['studentID'], '2')
+        self.assertEqual(sc.select[0]['courseID'], '2')
+
+    def test_removeByCourseID(self):
+        """测试删除选课信息"""
+        sc = Obj.SelectCourseList()
+        sc.add('1', '2')
+        sc.add('1', '3')
+        sc.add('2', '2')
+        sc.removeByCourseID('2')
+        self.assertEqual(len(sc.select), 1)
+        self.assertEqual(sc.select[0]['studentID'], '1')
+        self.assertEqual(sc.select[0]['courseID'], '3')
+
     def test_write(self):
         """测试写入文件"""
         sc = Obj.SelectCourseList()
