@@ -1,18 +1,25 @@
 # 基于pyqt5的学生信息选课管理系统
 
 import sys
-
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-from PyQt5 import QtCore
+from functools import partial
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QSplashScreen
+from PyQt5 import QtCore, QtGui
 from UI.MainUI import Ui_StudentManagement
 import Obj
 import util
+import time
+
 
 class Main(QMainWindow):
     def __init__(self, parent=None):
         super(Main, self).__init__(parent)
         self.ui = Ui_StudentManagement()
         self.ui.setupUi(self)
+
+        # 设置窗口标题
+        self.setWindowTitle("学生信息选课管理系统")
+        # 加载logo
+        self.setWindowIcon(QtGui.QIcon("./img/logo.png"))
 
         # 挂载事件
         self.ui.studentButton.clicked.connect(self.studentRegister)
@@ -606,15 +613,56 @@ class Main(QMainWindow):
                 for j in range(len(self.scList[i]['courseID'])):
                     self.ui.deleteStudentChoiceCourseID.addItem(self.scList[i]['courseID'][j])
 
-
 if __name__ == '__main__':
     # 创建应用
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
     app = QApplication(sys.argv)
 
+    # 动画
+    splash = QSplashScreen(QtGui.QPixmap("./img/logo.png"))
+
+    # 设置窗口属性
+    splash.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
+    splash.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+
+    # 获取屏幕中心点
+    screen_geometry = app.desktop().screenGeometry()
+    center_point = screen_geometry.center()
+
+    # 设置窗口位置
+    splash.move(center_point.x() - splash.width() // 2, center_point.y() - splash.height() // 2)
+
+    # 创建渐入动画
+    animation = QtCore.QPropertyAnimation(splash, b"windowOpacity")
+    animation.setDuration(2000)  # 设置动画持续时间
+    animation.setStartValue(0.0)  # 设置动画起始值（完全透明）
+    animation.setEndValue(1.0)  # 设置动画结束值（完全不透明）
+
+    # 设置窗口标题
+    splash.showMessage("学生选课管理系统", QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, QtCore.Qt.white)
+
+    # 设置logo
+    splash.setPixmap(QtGui.QPixmap("./img/logo.png"))
+
+    # 显示启动过渡动画窗口
+    splash.show()
+
+    # 启动渐入动画
+    animation.start()
+
+    # 设置定时器，在一段时间后关闭窗口
+    timer = QtCore.QTimer()
+    timer.singleShot(2000, splash.close)
+
     # 创建主窗口
     main = Main()
-    # 显示窗口
-    main.show()
 
+    # 动画结束后关闭动画窗口并显示主窗口
+    def on_animation_finished(sp, ma):
+        sp.close()
+        ma.show()
+
+    animation.finished.connect(partial(on_animation_finished, splash, main))
+
+    # 运行应用，并监听事件
     sys.exit(app.exec_())
