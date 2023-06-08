@@ -20,6 +20,7 @@ class Main(QMainWindow):
         self.ui.studentButton_3.clicked.connect(self.queryStudent)
         self.ui.courseButton.clicked.connect(self.courseRegister)
         self.ui.deleteCourseButton.clicked.connect(self.removeCourse)
+        self.ui.courseButton_2.clicked.connect(self.queryCourse)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -251,9 +252,52 @@ class Main(QMainWindow):
             self.ui.deleteCourseState.setText("不存在")
             self.ui.deleteCourseState.setStyleSheet("color: red;")
 
-
     def queryCourse(self):
-        pass
+        """
+        输入课程号，查询课程
+        """
+
+        # 获取课程信息
+        courseID = self.ui.ID_input_4.text()
+
+        # 查询课程
+        courses = self.courseManager.query(courseID)
+
+        if courseID == "":
+            # 查询全部
+            if not courses:
+                # 更改提示
+                self.ui.textBrowser_2.setText("------无课程信息------\n")
+                self.ui.textBrowser_2.setStyleSheet("color: red;")
+            else:
+                # 更改提示，组装信息
+                output = "-------课程信息-------\n"
+                for cou in courses:
+                    # 课程号预留3位，课程名预留4位，学分预留2位，执教老师预留4位
+                    s = cou['courseID'] + " " * (4 - len(cou['courseID'])) + \
+                        cou['courseName'] + "  " * (5 - len(cou['courseName'])) + \
+                        cou['courseCredit'] + " " * (3 - len(cou['courseCredit'])) + \
+                        cou['courseTeacher'] + "  " * (5 - len(cou['courseTeacher'])) + "\n"
+                    output += s
+                self.ui.textBrowser_2.setText(output)
+                self.ui.textBrowser_2.setStyleSheet("color: black;")
+        else:
+            # 查询单个
+            if courses is None:
+                # 更改提示
+                self.ui.textBrowser_2.setText("----课程信息不存在----\n")
+                self.ui.textBrowser_2.setStyleSheet("color: red;")
+            else:
+                # 组装信息
+                output = "-------课程信息-------\n"
+                # 课程号预留3位，课程名预留4位，学分预留2位，执教老师预留4位
+                s = courses['courseID'] + " " * (4 - len(courses['courseID'])) + \
+                    courses['courseName'] + "  " * (5 - len(courses['courseName'])) + \
+                    courses['courseCredit'] + " " * (3 - len(courses['courseCredit'])) + \
+                    courses['courseTeacher'] + "  " * (5 - len(courses['courseTeacher'])) + "\n"
+                output += s
+                self.ui.textBrowser_2.setText(output)
+                self.ui.textBrowser_2.setStyleSheet("color: black;")
 
     def SCRegister(self):
         pass
