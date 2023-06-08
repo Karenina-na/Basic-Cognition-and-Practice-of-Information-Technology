@@ -25,6 +25,13 @@ class TestStudentList(unittest.TestCase):
         self.assertEquals(stu.students[0]['studentAge'], '4')
         self.assertEquals(stu.students[0]['studentClass'], '5')
 
+    def test_remove(self):
+        """测试删除学生"""
+        stu = Obj.StudentList()
+        stu.add('1', '2', '3', '4', '5')
+        self.assertTrue(stu.remove('1'))
+        self.assertFalse(stu.remove('1'))
+
     def test_write(self):
         """测试写入文件"""
         stu = Obj.StudentList()

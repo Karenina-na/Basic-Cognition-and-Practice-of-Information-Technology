@@ -14,7 +14,9 @@ class Main(QMainWindow):
         self.ui = Ui_StudentManagement()
         self.ui.setupUi(self)
 
+        # 挂载事件
         self.ui.studentButton.clicked.connect(self.studentRegister)
+        self.ui.deleteStudentButton.clicked.connect(self.removeStudent)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -27,7 +29,6 @@ class Main(QMainWindow):
         self.studentManager.load()
         self.courseManager.load()
         self.scManager.load()
-
 
     def studentRegister(self):
         """
@@ -48,12 +49,16 @@ class Main(QMainWindow):
         if studentID == "":
             self.ui.ID_input.setFocus()
             self.ui.ID_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不能为空")
+            self.ui.lineEdit.setStyleSheet("color: red;")
             return
         else:
             self.ui.ID_input.setStyleSheet("")
         if studentName == "":
             self.ui.Name_input.setFocus()
             self.ui.Name_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不能为空")
+            self.ui.lineEdit.setStyleSheet("color: red;")
             return
         else:
             self.ui.Name_input.setStyleSheet("")
@@ -63,20 +68,56 @@ class Main(QMainWindow):
         if studentAge == "":
             self.ui.Age_input.setFocus()
             self.ui.Age_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不能为空")
+            self.ui.lineEdit.setStyleSheet("color: red;")
             return
         else:
             self.ui.Age_input.setStyleSheet("")
         if studentClass == "":
             self.ui.Class_input.setFocus()
             self.ui.Class_input.setStyleSheet("border: 1px solid red;")
+            self.ui.lineEdit.setText("不能为空")
+            self.ui.lineEdit.setStyleSheet("color: red;")
             return
         else:
             self.ui.Class_input.setStyleSheet("")
 
-        print(studentID, studentName, studentGender, studentAge, studentClass)
+        # 注册学生
+        self.studentManager.add(studentID, studentName, studentGender, studentAge, studentClass)
+
+        # 更改提示
+        self.ui.lineEdit.setText("注册成功")
+        self.ui.lineEdit.setStyleSheet("color: green;")
 
     def removeStudent(self):
-        pass
+        """
+        输入学号，删除学生
+        """
+
+        # 获取学号信息
+        studentID = self.ui.ID_input_7.text()
+
+        # 如果有空值，弹出警告
+        if studentID == "":
+            self.ui.ID_input_7.setFocus()
+            self.ui.ID_input_7.setStyleSheet("border: 1px solid red;")
+            self.ui.deleteStudentState.setText("不能为空")
+            self.ui.deleteStudentState.setStyleSheet("color: red;")
+            return
+
+        # 删除学生
+        flag = self.studentManager.remove(studentID)
+
+        if flag:
+            # 更改提示
+            self.ui.deleteStudentState.setText("删除成功")
+            self.ui.deleteStudentState.setStyleSheet("color: green;")
+        else:
+            # 更改提示
+            self.ui.deleteStudentState.setText("不存在")
+            self.ui.deleteStudentState.setStyleSheet("color: red;")
+
+
 
     def queryStudent(self):
         pass

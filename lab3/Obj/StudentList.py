@@ -28,6 +28,17 @@ class StudentList:
             'studentClass': studentClass,
         })
 
+    def remove(self, studentID):
+        """
+        删除学生
+        :param studentID: 学号
+        """
+        for student in self.students:
+            if student['studentID'] == studentID:
+                self.students.remove(student)
+                return True
+        return False
+
     def load(self):
         """加载文件"""
         self.students = read_json(self.path)
