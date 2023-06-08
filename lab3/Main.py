@@ -18,6 +18,7 @@ class Main(QMainWindow):
         self.ui.studentButton.clicked.connect(self.studentRegister)
         self.ui.deleteStudentButton.clicked.connect(self.removeStudent)
         self.ui.studentButton_3.clicked.connect(self.queryStudent)
+        self.ui.courseButton.clicked.connect(self.courseRegister)
 
         # 学生管理类
         self.studentManager = StudentList()
@@ -168,7 +169,56 @@ class Main(QMainWindow):
                 self.ui.textBrowser.setStyleSheet("color: black;")
 
     def courseRegister(self):
-        pass
+        """
+        输入课程信息，注册课程
+        """
+
+        # 获取课程信息
+        courseID = self.ui.courseID_input.text()
+        courseName = self.ui.courseName_input.text()
+        courseCredit = self.ui.courseCredit_input.text()
+        courseTeacher = self.ui.courseTeacher_input.text()
+
+        # 如果有空值，弹出警告
+        if courseID == "":
+            self.ui.courseID_input.setFocus()
+            self.ui.courseID_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不能为空")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseID_input.setStyleSheet("")
+        if courseName == "":
+            self.ui.courseName_input.setFocus()
+            self.ui.courseName_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不能为空")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseName_input.setStyleSheet("")
+        if courseCredit == "":
+            self.ui.courseCredit_input.setFocus()
+            self.ui.courseCredit_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不能为空")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseCredit_input.setStyleSheet("")
+        if courseTeacher == "":
+            self.ui.courseTeacher_input.setFocus()
+            self.ui.courseTeacher_input.setStyleSheet("border: 1px solid red;")
+            self.ui.courseState.setText("不能为空")
+            self.ui.courseState.setStyleSheet("color: red;")
+            return
+        else:
+            self.ui.courseTeacher_input.setStyleSheet("")
+
+        # 注册课程
+        self.courseManager.add(courseID, courseName, courseCredit, courseTeacher)
+
+        # 更改提示
+        self.ui.courseState.setText("注册成功")
+        self.ui.courseState.setStyleSheet("color: green;")
 
     def removeCourse(self):
         pass
