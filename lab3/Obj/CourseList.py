@@ -26,6 +26,30 @@ class CourseList:
             'courseTeacher': courseTeacher,
         })
 
+    def remove(self, courseID):
+        """
+        删除课程
+        :param courseID: 课程ID
+        """
+        for course in self.courses:
+            if course['courseID'] == courseID:
+                self.courses.remove(course)
+                return True
+        return False
+
+    def query(self, courseID):
+        """
+        查询课程
+        :param courseID: 课程ID
+        课程ID为空代表查询全部
+        """
+        if courseID == "":
+            return self.courses
+        for course in self.courses:
+            if course['courseID'] == courseID:
+                return course
+        return None
+
     def load(self):
         """加载文件"""
         self.courses = read_json(self.path)

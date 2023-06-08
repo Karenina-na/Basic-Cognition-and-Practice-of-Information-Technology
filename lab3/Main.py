@@ -221,7 +221,33 @@ class Main(QMainWindow):
         self.ui.courseState.setStyleSheet("color: green;")
 
     def removeCourse(self):
-        pass
+        """
+        输入课程号，删除课程
+        """
+
+        # 获取课程号信息
+        courseID = self.ui.courseID_input_2.text()
+
+        # 如果有空值，弹出警告
+        if courseID == "":
+            self.ui.courseID_input_2.setFocus()
+            self.ui.courseID_input_2.setStyleSheet("border: 1px solid red;")
+            self.ui.deleteCourseState.setText("不能为空")
+            self.ui.deleteCourseState.setStyleSheet("color: red;")
+            return
+
+        # 删除课程
+        flag = self.courseManager.remove(courseID)
+
+        if flag:
+            # 更改提示
+            self.ui.deleteCourseState.setText("删除成功")
+            self.ui.deleteCourseState.setStyleSheet("color: green;")
+        else:
+            # 更改提示
+            self.ui.deleteCourseState.setText("不存在")
+            self.ui.deleteCourseState.setStyleSheet("color: red;")
+
 
     def queryCourse(self):
         pass
