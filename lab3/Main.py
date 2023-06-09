@@ -279,7 +279,7 @@ class Main(QMainWindow):
             return
         else:
             self.ui.courseCredit_input.setStyleSheet("")
-        if not util.checkCourseTeacher(courseTeacher):
+        if not util.checkTeacherName(courseTeacher):
             self.ui.courseTeacher_input.setFocus()
             self.ui.courseTeacher_input.setStyleSheet("border: 1px solid red;")
             self.ui.courseState.setText("不合法")
